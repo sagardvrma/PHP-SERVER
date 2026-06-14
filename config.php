@@ -11,10 +11,20 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'vanthex_engine');
+define('DB_HOST', getenv('MYSQLHOST') ?: 'zephyr.proxy.rlwy.net');
+define('DB_USER', getenv('MYSQLUSER') ?: 'root');
+define('DB_PASS', getenv('MYSQLPASSWORD') ?: 'WUBfTjOXkkODxGqOMZgzpEbwmZDmgclX');
+define('DB_NAME', getenv('MYSQLDATABASE') ?: 'railway');
+define('DB_PORT', getenv('MYSQLPORT') ?: 3306);
+
+// Create Connection
+$conn = new mysqli(
+    DB_HOST,
+    DB_USER,
+    DB_PASS,
+    DB_NAME,
+    DB_PORT
+);
 
 // Application Settings
 define('APP_NAME', 'VANTHEX ENGINE');
