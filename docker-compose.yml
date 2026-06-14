@@ -1,0 +1,90 @@
+# VANTHEX ENGINE - Docker Compose
+# Owner: @SagarXModder
+# Usage: docker-compose up -d
+
+version: '3.8'
+
+services:
+  # PHP + Apache Web Server
+  vanthex-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vanthex-engine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./logs:/var/log/apache2
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=vanthex-db
+      - DB_USER=vanthex_user
+      - DB_PASS=vanthex_pass_2026
+      - DB_NAME=vanthex_engine
+    depends_on:
+      vanthex-db:
+        condition: service_healthy
+    networks:
+      - vanthex-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api.php?action=health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL Database
+  vanthex-db:
+    image: mysql:8.0
+    container_name: vanthex-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=vanthex_root_2026
+      - MYSQL_DATABASE=vanthex_engine
+      - MYSQL_USER=vanthex_user
+      - MYSQL_PASSWORD=vanthex_pass_2026
+    volumes:
+      - vanthex-db-data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/01-database.sql
+    networks:
+      - vanthex-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pvanthex_root_2026"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # phpMyAdmin (Optional)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: vanthex-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    env_file:
+      - .env
+    environment:
+      - PMA_HOST=vanthex-db
+      - PMA_PORT=3306
+      - PMA_USER=vanthex_user
+      - PMA_PASSWORD=vanthex_pass_2026
+    depends_on:
+      - vanthex-db
+    networks:
+      - vanthex-network
+
+volumes:
+  vanthex-db-data:
+    driver: local
+
+networks:
+  vanthex-network:
+    driver: bridge
