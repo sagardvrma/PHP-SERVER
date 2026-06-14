@@ -1,0 +1,29 @@
+# VANTHEX ENGINE - Environment Variables
+# Owner: @SagarXModder
+
+# =====================================================
+# DATABASE CONFIGURATION
+# =====================================================
+DB_HOST=vanthex-db
+DB_USER=vanthex_user
+DB_PASS=vanthex_pass_2026
+DB_NAME=vanthex_engine
+
+# =====================================================
+# APPLICATION SETTINGS
+# =====================================================
+APP_NAME=VANTHEX ENGINE
+APP_OWNER=@SagarXModder
+BASE_URL=http://localhost:8080/
+
+# =====================================================
+# SECURITY
+# =====================================================
+ADMIN_SECRET=VANTHEX_CHEATS
+
+# =====================================================
+# SOCIAL LINKS
+# =====================================================
+TELEGRAM=https://t.me/sagarxmodder
+YOUTUBE=https://youtube.com/@VANTHEXCORE
+INSTAGRAM=https://instagram.com/sagar_db_20
